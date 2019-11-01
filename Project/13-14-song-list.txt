@@ -1,0 +1,269 @@
+The goal of this project is to write an application for maintaining a list of favorite songs. Each song has two piece of information, title and artist.
+
+The application allows to add data from file, save data to file, search in the data for songs with a key phrase appearing either in the title or in the artist, add new song, delete a specific song, and change title/artist of a specic song.
+
+The application consts of three class files:
+1. Song.java:	This file implements an interface SongInt.java
+2. SongCollection.java:	This file implements an interface SongCollectionInt.java
+3. SongMain.java:	This file is the main file. The program execution is by way of "java SongMain".
+
+A song data file takes the following form.
+. The first line is the number of song
+. After the first line, the songs appear in two lines each, the first line being the title and the second the artist.
+
+For example, the following is a data file consistsing of 5 songs:
+
+5
+Like A Rolling Stone
+Bob Dylan
+Satisfaction
+The Rolling Stones
+Imagine
+John Lennon
+What's Going On
+Marvin Gaye
+Respect
+Aretha Franklin
+
+To read from a file, you need to read the data line by line, using the nextLine method of Scanner. To convert a String data that represents an integer, you can use Integer.parseInt.
+
+This file format should be used when writing to a file.
+
+Here are some specific instructions for each class.
+
+(I) Song.java
+
+Naturally, we want to use two String instance variables for representing the information: title and artist.  The constructor for the class may take two String data and store their values in their respective instance variables.  There are two methods that need implementation:
+
+  public String getTitle();
+  public String getArtist();
+
+These are getters.
+
+(II) SongCollection.java
+
+We use one private instance variable
+
+	Song[] theSongs;
+
+The methods to implement are:
+
+  public int size();
+  public void addFromFile( File f );
+  public void writeToFile( File f );
+  public void addOneSong( String t, String a );
+  public void delete( int pos );
+  public void searchByTitle( String key );
+  public void searchByArtist( String key );
+  public void show( int start, int end );
+
+The actions of the methods are as follows:
+
+1. The method size() returns the number of elements in the array.
+
+2. The method addFromFile( File f ) reads data from file, in the following
+manner.  First, it creates a new scanner to read from f. It encases the creation in try-catch so that if FileNotFoundException occurs, then the method prints an error message and returns immediately.
+
+Second, the method reads the next line and converts it to an integer. This  this integer is the number of additional slots.
+
+Third, the method creates a new array of Song data whose dimension is the current size + the additional number of elements. This can be achieved by
+
+	Song[] merged = Arrays.copyOf( theSongs, NEW_ARRAY_LENGTH );
+
+After that, the methods reads data from the file in pairs of lines and stores the data in the new slot. At the end of it copies merged to the array by
+
+	theSongs = merged;
+
+
+3. The method writeToFile( File f ) writes the data to the file f. The same error handling as in addFromFile is needed.
+
+4. The method addOneSong( String t, String a ) adds a song specified by t and a. The way the method works is very similar to the way addFromFile does. The differences are the size increase is by 1 and the new element shall be stored at the end of the new array.
+
+5. The method delete( int pos ) deletes the element at postiion pos, if the value of pos is valid.
+
+6. The method searchByTitle( Sting key ) prints all the songs whose title contains key along with their index values. You can use the method indexOf( key ) on the value returned by the getTitle method.
+
+7. The method searchByArtist( Sting key ) prints all the songs whose artist contains key along with their index values. You can use the method indexOf( key ) on the value returned by the getArtist method.
+
+8. The method show( int start, int end ) prints all the songs whose index values are greater than or equal to start and smaller than end. Adjustments of the values may be needed when start < 0 or when end > theSongs.length .
+
+(III) SongMain.java
+
+This consists of one method, which is main. The method presents to the user command choices, receive the choice by a number (you can use Integer.parseInt( keyboard.nextLine() ), where keyboard is the Scanner object you instantiate in your program as the Scanner to read from the keyboard). You can then use a switch statement to respond to the choice maid.
+
+
+Here is a sample execution of the program.
+
+% java SongMain
+========Select action========
+0. Quit
+1. Get collection size
+2. Search for title
+3. Search for artist
+4. Add from file
+5. Save to file
+6. Add one song
+7. Remove one song
+8. Show
+Enter choice: 4
+Enter file name: songData.txt
+========Select action========
+0. Quit
+1. Get collection size
+2. Search for title
+3. Search for artist
+4. Add from file
+5. Save to file
+6. Add one song
+7. Remove one song
+8. Show
+Enter choice: 2
+Enter title search key: Heaven
+30: Stairway To Heaven, Led Zeppelin
+189: Knocking On Heaven's Door, Bob Dylan
+352: Tears In Heaven, Eric Clapton
+409: Monkey Gone To Heaven, Pixies
+482: Just Like Heaven, The Cure
+========Select action========
+0. Quit
+1. Get collection size
+2. Search for title
+3. Search for artist
+4. Add from file
+5. Save to file
+6. Add one song
+7. Remove one song
+8. Show
+Enter choice: 3
+Enter artist search key: Sabbath
+249: Paranoid, Black Sabbath
+309: Iron Man, Black Sabbath
+========Select action========
+0. Quit
+1. Get collection size
+2. Search for title
+3. Search for artist
+4. Add from file
+5. Save to file
+6. Add one song
+7. Remove one song
+8. Show
+Enter choice: 4
+Enter file name: Sabbath Bloody Sabbath
+*** File Not Found ***
+========Select action========
+0. Quit
+1. Get collection size
+2. Search for title
+3. Search for artist
+4. Add from file
+5. Save to file
+6. Add one song
+7. Remove one song
+8. Show
+Enter choice: 6
+Enter title: Sabbath Bloody Sabbath
+Enter artist: Black Sabbath
+========Select action========
+0. Quit
+1. Get collection size
+2. Search for title
+3. Search for artist
+4. Add from file
+5. Save to file
+6. Add one song
+7. Remove one song
+8. Show
+Enter choice: 2
+Enter title search key: Blood
+267: Sunday Bloody Sunday, U2
+413: Young Blood, The Coasters
+500: Sabbath Bloody Sabbath, Black Sabbath
+========Select action========
+0. Quit
+1. Get collection size
+2. Search for title
+3. Search for artist
+4. Add from file
+5. Save to file
+6. Add one song
+7. Remove one song
+8. Show
+Enter choice: 7
+Enter position: 267
+========Select action========
+0. Quit
+1. Get collection size
+2. Search for title
+3. Search for artist
+4. Add from file
+5. Save to file
+6. Add one song
+7. Remove one song
+8. Show
+Enter choice: 1
+***
+*** Size = 500
+========Select action========
+0. Quit
+1. Get collection size
+2. Search for title
+3. Search for artist
+4. Add from file
+5. Save to file
+6. Add one song
+7. Remove one song
+8. Show
+Enter choice: 8
+Enter start position: 10
+Enter end position: 25
+10: My Generation, The Who
+11: A Change Is Gonna Come, Sam Cooke
+12: Yesterday, The Beatles
+13: Blowin' In The Wind, Bob Dylan
+14: London Calling, The Clash
+15: I Want To Hold Your Hand, The Beatles
+16: Purple Haze, Jimi Hendrix
+17: Maybellene, Chuck Berry
+18: Hound Dog, Elvis Presley
+19: Let It Be, The Beatles
+20: Born To Run, Bruce Springsteen
+21: Be My Baby, The Ronettes
+22: In My Life, The Beatles
+23: People Get Ready, The Impressions
+24: God Only Knows, The Beach Boys
+========Select action========
+0. Quit
+1. Get collection size
+2. Search for title
+3. Search for artist
+4. Add from file
+5. Save to file
+6. Add one song
+7. Remove one song
+8. Show
+Enter choice: 5
+Enter file name: foo.txt
+========Select action========
+0. Quit
+1. Get collection size
+2. Search for title
+3. Search for artist
+4. Add from file
+5. Save to file
+6. Add one song
+7. Remove one song
+8. Show
+Enter choice: 0
+
+
+Here is the best strategy to accomplish the goal:
+
+Step 1: Write Song.java. Make sure that it has the "implements SongInt" declaration and it compiles.
+
+Step 2: Write the minimal SongCollection.java. The class should have the "implements" declaration as well as the declaration of its instance variable theSongs. The constructor sets this variable to a zero-element array of Song objects. Add all the methods declared in SongCollectionInt, with the ";" of all the void methods with a pair of curly brackets, {} and the approach content for the method size (which should return the length of the instance variable theSongs). With this the file should compile if there is no syntax error.
+
+Step 3: Write the minimal version of SongMain. With the do-while loop to receive input from the choice and the switch-statement in it direct the action.
+The block associated with each "case" can be just one "break" statement, except for the choice of 0, which terminates the program.
+
+Step 4. Start fill in the contents in SongMain and SongCollection. Each actions appearing in SongMain corresponds to one unique method in SongCollection.
